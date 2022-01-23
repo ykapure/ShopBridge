@@ -18,8 +18,7 @@ export class InventoryService {
         this.inventory_products = sharedObj;
       });
   }
-
-  
+ 
   // getInventoryList(obj: any): Observable<any> {
   //   let param = new HttpParams();
   //   for(const key in obj) {
@@ -29,15 +28,15 @@ export class InventoryService {
   //   }
   //   return this.http.get<any>(this.baseUrl, { params: param });
   // }
-  getInventoryDetails(url: any): Observable<any> {
+  // getInventoryDetails(url: any): Observable<any> {
     // let param = new HttpParams();
     // for(const key in obj) {
     //   if (key && obj[key] != null) {
     //     param = param.append(key, obj[key])
     //   }
     // }
-    return this.http.get<any>(url);
-  }
+  //   return this.http.get<any>(url);
+  // }
 
   getInventoryList(key?: any): Observable<any> {
     if (key) {

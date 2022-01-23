@@ -146,20 +146,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.getInventoryList();
   }
 
-  setActiveCard(poke: any, ind: any) {
-    console.log(poke);
-    console.log(ind);
-    const obj = {
-      searchKey: this.searchKey,
-      page: this.page,
-      itemsPerPage: this.itemsPerPage,
-      activeInventory: poke,
-      activeInventoryIndex: ind,
-    };
-    // this.spinner.show();
-    // this.sharedService.changeSharedData(obj);
-    // this.route.navigateByUrl('/details');
-    // this.route.navigate(['/inventory/details']);
+  detailsOfProduct(item: any, ind: any) {
   }
 
   ngOnDestroy(): void {}
