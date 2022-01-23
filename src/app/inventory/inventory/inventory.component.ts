@@ -8,6 +8,7 @@ import {
   faEdit,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-inventory',
@@ -40,7 +41,8 @@ export class InventoryComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private route: Router,
     private modalService: NgbModal,
-    private sharedService: SharedDataService
+    private sharedService: SharedDataService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -75,9 +77,17 @@ export class InventoryComponent implements OnInit, OnDestroy {
       (response) => {
         this.inventoryList = response;
         this.totalItems = response.length;
+        if (!response.length) {
+          this.toastr.warning('Result not found');
+          setTimeout(()=>{
+            this.getInventoryList(); 
+          })
+        }
         this.spinner.hide();
+        
       },
       (error) => {
+        this.toastr.error('Server error');
         console.log(error);
         this.spinner.hide();
       }
@@ -97,8 +107,10 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.inventoryList = response;
         this.totalItems = response.length;
         this.spinner.hide();
+        this.toastr.success('Item added successfully');
       },
       (error) => {
+        this.toastr.error('Server error');
         console.log(error);
         this.spinner.hide();
       }
@@ -112,8 +124,10 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.inventoryList = response;
         this.totalItems = response.length;
         this.spinner.hide();
+        this.toastr.success('Item updated successfully');
       },
       (error) => {
+        this.toastr.error('Server error');
         console.log(error);
         this.spinner.hide();
       }
@@ -127,8 +141,10 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.inventoryList = response;
         this.totalItems = response.length;
         this.spinner.hide();
+        this.toastr.success('Item deleted successfully');
       },
       (error) => {
+        this.toastr.error('Server error');
         console.log(error);
         this.spinner.hide();
       }
