@@ -41,9 +41,9 @@ export class InventoryService {
   getInventoryList(key?: any): Observable<any> {
     if (key) {
       const product = this.inventory_products.filter((product:any) => {
-        if (product.name.includes(key)) {
+        if (product.name.toLowerCase().includes(key.toLowerCase())) {
           return product;
-        } else if (product.description.includes(key)) {
+        } else if (product.description.toLowerCase().includes(key.toLowerCase())) {
           return product;
         }
       });
