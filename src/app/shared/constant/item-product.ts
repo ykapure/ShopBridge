@@ -1,45 +1,39 @@
 export const INVENTORY_PRODUCTS = [
     {
-      id: 1,
+      id: '_2a07n1ph1',
       name: 'product 1',
-      url: 'product 1 description',
-      price: 10,
-      description: ''
+      description: 'product 1 description',
+      price: 10
     },
     {
-      id: 2,
+      id: '_swdgfsdg',
       name: 'Product 2',
-      url: 'Product 2 description',
-      price: 8,
-      description: ''
+      description: 'Product 2 description',
+      price: 34
     },
     {
-        id: 3,
+        id: '_sfddf234',
         name: 'mobile',
-        url: 'mobile description',
-        price: 50,
-        description: ''
+        description: 'mobile description',
+        price: 50
       },
       {
-        id: 4,
+        id: '_e423js23',
         name: 'Product T',
-        url: 'Product T description',
-        price: 8,
-        description: ''
+        description: 'Product T description',
+        price: 8
       },
       {
-        id: 5,
+        id: '_7e23js23',
         name: 'product Tablet',
-        url: 'product Tablet description',
-        price: 100,
-        description: ''
+        description: 'product Tablet description',
+        price: 100
       },
       {
-        id: 6,
+        id: '_0e23js23',
         name: 'phone',
-        url: 'phone description',
-        price: 18,
-        description: ''
+        description: 'phone description',
+        price: 18
       },
       
   ];

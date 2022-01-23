@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
 import { Router } from '@angular/router';
 import { InventoryService } from '../inventory.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-inventory',
@@ -12,7 +13,12 @@ import { InventoryService } from '../inventory.service';
 export class InventoryComponent implements OnInit, OnDestroy {
 
   inventoryList: any = [];
-  
+  newItem = {};
+  editItem = {
+    name : '',
+    price : '',
+    description : ''
+  };
   currentCard: any;
   currentIndex = -1;
   searchKey: any = null;
@@ -27,6 +33,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     private service: InventoryService,
     private spinner: NgxSpinnerService,
     private route: Router,
+    private modalService: NgbModal,
     private sharedService: SharedDataService) { 
   }
 
@@ -49,16 +56,47 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
   getInventoryList() {
     const reqParams = this.getRequestParams(this.searchKey, this.page, this.itemsPerPage);
-    // this.spinner.show();
+    this.spinner.show();
     this.service.getInventoryList(reqParams).subscribe((response) => {
       this.inventoryList = response;
       this.totalItems = response.length;
-      // this.spinner.hide();
+      this.spinner.hide();
     },
     (error) => {
       console.log(error);
-      // this.spinner.hide();
+      this.spinner.hide();
     });;
+  }
+  openPopup(content:any, item?: any) {
+    this.editItem = JSON.parse(JSON.stringify(item));
+    this.modalService.open(content, { centered: true });
+  }
+
+  addInventoryItem(item:any) {
+    this.spinner.show();
+    this.service.addInventoryItem(item.value).subscribe((response) => {
+      this.inventoryList = response;
+      this.totalItems = response.length;
+      this.spinner.hide();
+    },
+    (error) => {
+      console.log(error);
+      this.spinner.hide();
+    });;
+  }
+
+  editInventoryItem() {
+    this.spinner.show();
+    this.service.editInventoryItem(this.editItem).subscribe((response) => {
+      this.inventoryList = response;
+      this.totalItems = response.length;
+      this.spinner.hide();
+    },
+    (error) => {
+      console.log(error);
+      this.spinner.hide();
+    });
+    this.getInventoryList()
   }
 
   pageChange(page: any): void {

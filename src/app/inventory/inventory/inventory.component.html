@@ -1,6 +1,10 @@
 
 <div class="row">
     <div class="col">
+      <button class="btn btn-outline-primary mb-2 mr-2" 
+      (click)="openPopup(content)">Add New Item</button>
+    </div>
+    <div class="col">
       <select (change)="itemsPerPageChange($event)" class="custom-select w-25">
         <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === 20">
           {{ size }}
@@ -37,11 +41,15 @@
         [class.active]="i == currentIndex"
         (click)="setActiveCard(pk, i)"
       >
-      <div class="card-body">
-        <span> {{ pk.name}} </span>
-        <span> {{ pk.description}} </span>
-        <img src="{{ pk.url }}" alt="" /> <br />
-        <a href="{{pk.url}}" class="card-link">Raw Data</a>
+      <div class="card-body d-flex justify-content-between">
+        <div>
+          <span> {{ pk.name}} </span>
+          <span> {{ pk.price}} </span>
+          <span> {{ pk.description}} </span>
+        </div>
+        <div class="edit">
+          <button class="btn btn-outline-primary"  (click)="openPopup(editContent, pk)">Edit</button>
+        </div>
       </div>
     </div>
   </div>
@@ -54,3 +62,65 @@
       (pageChange)="pageChange($event)"
     ></pagination-controls>
   </div>
+
+  <ng-template #editContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Edit Item</h4>
+      <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+    </div>
+    <div class="modal-body">
+        <form #editForm="ngForm" (ngSubmit)="editInventoryItem(); modal.close('Close click')">
+            <div class="form-group mb-2 pb-2">
+              <label for="nameId">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="editItem.name" name="name" id="nameId" placeholder="Enter Name">
+            </div>
+            <div class="form-group mb-2 pb-2">
+                <label for="priceId">Price</label>
+                <input type="number" class="form-control" [(ngModel)]="editItem.price" name="price" id="priceId" placeholder="Enter Price">
+            </div>
+            <div class="form-group mb-2 pb-2">
+                <label for="descriptionId">Description</label>
+                <input type="text" class="form-control" [(ngModel)]="editItem.description" name="description" id="descriptionId" placeholder="Enter Description">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-outline-primary">Update</button>
+              <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </ng-template>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Add New Item</h4>
+      <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+    </div>
+    <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="addInventoryItem(addForm); modal.close('Close click')">
+            <div class="form-group mb-2 pb-2">
+              <label for="nameId">Name</label>
+              <input type="text" class="form-control" ngModel name="name" id="nameId" placeholder="Enter Name">
+            </div>
+            <div class="form-group mb-2 pb-2">
+                <label for="priceId">Price</label>
+                <input type="number" class="form-control" ngModel name="price" id="priceId" placeholder="Enter Price">
+            </div>
+            <div class="form-group mb-2 pb-2">
+                <label for="descriptionId">Description</label>
+                <input type="text" class="form-control" ngModel name="description" id="descriptionId" placeholder="Enter Description">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-outline-primary">Save</button>
+              <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </ng-template>
