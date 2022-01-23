@@ -39,9 +39,15 @@ export class InventoryService {
     return this.http.get<any>(url);
   }
 
-  getInventoryList(obj?: any): Observable<any> {
-    if (obj.id) {
-      const product = this.inventory_products.find((product:any) => product.id === obj.id);
+  getInventoryList(key?: any): Observable<any> {
+    if (key) {
+      const product = this.inventory_products.filter((product:any) => {
+        if (product.name.includes(key)) {
+          return product;
+        } else if (product.description.includes(key)) {
+          return product;
+        }
+      });
       return of(product);
     } else {
       return of(this.inventory_products);
@@ -67,6 +73,18 @@ export class InventoryService {
     });
     this.inventory_products = newObj;
     this.sharedService.changeSharedData(newObj);
+    return of(this.inventory_products);
+  }
+
+  deleteInventoryItem(obj?: any): Observable<any> {
+    this.inventory_products.forEach((product:any, ind:any) => {
+      if (product.id === obj.id) {
+        product = obj;
+        this.inventory_products.splice(ind,1);
+      }
+    });
+    // this.inventory_products = newObj;
+    this.sharedService.changeSharedData(this.inventory_products);
     return of(this.inventory_products);
   }
 

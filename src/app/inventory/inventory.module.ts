@@ -4,6 +4,7 @@ import { InventoryRoutingModule } from './inventory-routing.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { InventoryComponent } from './inventory/inventory.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -13,7 +14,8 @@ import { InventoryComponent } from './inventory/inventory.component';
     CommonModule,
     FormsModule,
     NgxPaginationModule,
-    InventoryRoutingModule
+    InventoryRoutingModule,
+    FontAwesomeModule
   ]
 })
 export class InventoryModule { }

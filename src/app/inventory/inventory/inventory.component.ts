@@ -1,41 +1,47 @@
-import { Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
 import { Router } from '@angular/router';
 import { InventoryService } from '../inventory.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  faEdit,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css']
+  styleUrls: ['./inventory.component.css'],
 })
 export class InventoryComponent implements OnInit, OnDestroy {
-
   inventoryList: any = [];
   newItem = {};
-  editItem = {
-    name : '',
-    price : '',
-    description : ''
+  activeItem = {
+    name: '',
+    price: '',
+    description: '',
   };
   currentCard: any;
   currentIndex = -1;
   searchKey: any = null;
   ability: any = null;
-  
-  page = 1; 
+
+  page = 1;
   itemsPerPage: any = 20;
   pageSizes = [10, 20, 50];
   totalItems = 0;
+
+  faEdit = faEdit;
+  faTrash = faTrash;
 
   constructor(
     private service: InventoryService,
     private spinner: NgxSpinnerService,
     private route: Router,
     private modalService: NgbModal,
-    private sharedService: SharedDataService) { 
-  }
+    private sharedService: SharedDataService
+  ) {}
 
   ngOnInit(): void {
     this.getInventoryList();
@@ -48,55 +54,85 @@ export class InventoryComponent implements OnInit, OnDestroy {
       params['name'] = searchKey;
       params['ability'] = searchKey;
     }
-    if (page) { params['offset'] = page - 1; }
-    if (itemsPerPage) { params['limit'] = itemsPerPage; }
+    if (page) {
+      params['offset'] = page - 1;
+    }
+    if (itemsPerPage) {
+      params['limit'] = itemsPerPage;
+    }
 
     return params;
   }
 
-  getInventoryList() {
-    const reqParams = this.getRequestParams(this.searchKey, this.page, this.itemsPerPage);
+  getInventoryList(searchKey?:any) {
+    const reqParams = this.getRequestParams(
+      this.searchKey,
+      this.page,
+      this.itemsPerPage
+    );
     this.spinner.show();
-    this.service.getInventoryList(reqParams).subscribe((response) => {
-      this.inventoryList = response;
-      this.totalItems = response.length;
-      this.spinner.hide();
-    },
-    (error) => {
-      console.log(error);
-      this.spinner.hide();
-    });;
+    this.service.getInventoryList(searchKey).subscribe(
+      (response) => {
+        this.inventoryList = response;
+        this.totalItems = response.length;
+        this.spinner.hide();
+      },
+      (error) => {
+        console.log(error);
+        this.spinner.hide();
+      }
+    );
   }
-  openPopup(content:any, item?: any) {
-    this.editItem = JSON.parse(JSON.stringify(item));
+  openPopup(content: any, item?: any) {
+    this.activeItem = item
+      ? JSON.parse(JSON.stringify(item))
+      : { name: '', price: '', description: '' };
     this.modalService.open(content, { centered: true });
   }
 
-  addInventoryItem(item:any) {
+  addInventoryItem(item: any) {
     this.spinner.show();
-    this.service.addInventoryItem(item.value).subscribe((response) => {
-      this.inventoryList = response;
-      this.totalItems = response.length;
-      this.spinner.hide();
-    },
-    (error) => {
-      console.log(error);
-      this.spinner.hide();
-    });;
+    this.service.addInventoryItem(item.value).subscribe(
+      (response) => {
+        this.inventoryList = response;
+        this.totalItems = response.length;
+        this.spinner.hide();
+      },
+      (error) => {
+        console.log(error);
+        this.spinner.hide();
+      }
+    );
   }
 
   editInventoryItem() {
     this.spinner.show();
-    this.service.editInventoryItem(this.editItem).subscribe((response) => {
-      this.inventoryList = response;
-      this.totalItems = response.length;
-      this.spinner.hide();
-    },
-    (error) => {
-      console.log(error);
-      this.spinner.hide();
-    });
-    this.getInventoryList()
+    this.service.editInventoryItem(this.activeItem).subscribe(
+      (response) => {
+        this.inventoryList = response;
+        this.totalItems = response.length;
+        this.spinner.hide();
+      },
+      (error) => {
+        console.log(error);
+        this.spinner.hide();
+      }
+    );
+  }
+
+  deleteInventoryItem() {
+    this.spinner.show();
+    this.service.deleteInventoryItem(this.activeItem).subscribe(
+      (response) => {
+        this.inventoryList = response;
+        this.totalItems = response.length;
+        this.spinner.hide();
+      },
+      (error) => {
+        console.log(error);
+        this.spinner.hide();
+      }
+    );
   }
 
   pageChange(page: any): void {
@@ -118,16 +154,13 @@ export class InventoryComponent implements OnInit, OnDestroy {
       page: this.page,
       itemsPerPage: this.itemsPerPage,
       activeInventory: poke,
-      activeInventoryIndex: ind
-    }
+      activeInventoryIndex: ind,
+    };
     // this.spinner.show();
     // this.sharedService.changeSharedData(obj);
     // this.route.navigateByUrl('/details');
     // this.route.navigate(['/inventory/details']);
   }
 
-  ngOnDestroy(): void {
-  }
-
+  ngOnDestroy(): void {}
 }
-
